@@ -3,17 +3,15 @@
 import { useRouter } from 'next/navigation';
 import { motion, type Variants } from 'framer-motion';
 import MinimalTopNav from '@/components/workspace/MinimalTopNav';
-import { Wand2, Sparkles, Copy, Timer, FileBox, Quote, Braces, Code } from 'lucide-react';
+import { Wand2, Sparkles, Copy, Timer, FileBox, Quote, Braces, Code, Terminal } from 'lucide-react';
 
 const tools = [
   { name: 'Humanizer', icon: Wand2, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit/writing' },
   { name: 'Paraphraser', icon: Sparkles, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit/writing' },
   { name: 'Flashcards', icon: Copy, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit/study' },
-  { name: 'Focus Timer', icon: Timer, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit/study' },
-  { name: 'PDF Summarizer', icon: FileBox, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit/research' },
+  { name: 'Pomodoro', icon: Timer, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit/study' },
+  { name: 'PDF Summarizer', icon: FileBox, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit/pdf-summarizer' },
   { name: 'Citation Generator', icon: Quote, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit/research' },
-  { name: 'JSON Formatter', icon: Braces, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit/dev' },
-  { name: 'Code Formatter', icon: Code, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit/dev' },
 ];
 
 const containerVariants: Variants = {
@@ -48,7 +46,7 @@ export default function BrainKitPage() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-5xl"
+          className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl"
         >
           {tools.map((tool) => (
             <motion.button

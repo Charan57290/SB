@@ -8,20 +8,53 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  notes     Note[]
+  id          String    @id @default(uuid())
+  email       String    @unique
+  password    String?
+  name        String
+  createdAt   DateTime  @default(now())
+  githubToken String?
+  avatar      String?
+  notes       Note[]
+  projects    Project[]
 }
 
 model Note {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   title     String
   content   String
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  userId    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  User      User?    @relation(fields: [userId], references: [id])
+  tags      Tag[]
+}
+
+model Tag {
+  id     String  @id @default(uuid())
+  name   String
+  noteId String?
+  Note   Note?   @relation(fields: [noteId], references: [id])
+}
+
+model Document {
+  id            String   @id @default(uuid())
+  title         String
+  fileUrl       String
+  sizeBytes     Int?
+  mimeType      String?
+  userId        String?
+  createdAt     DateTime @default(now())
+  extractedText String?
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  githubUrl   String?
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  User        User     @relation(fields: [userId], references: [id])
 }

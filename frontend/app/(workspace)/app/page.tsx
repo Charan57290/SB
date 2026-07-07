@@ -2,203 +2,191 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Plus, 
-  Wrench, 
-  Bot, 
-  FolderOpen, 
-  Network, 
-  Upload,
-  Search,
-  Command as CommandIcon,
-  X,
-  Sparkles,
-  Wand2,
-  Copy,
-  Timer,
-  FileBox,
-  Quote,
-  Braces,
-  Code
-} from 'lucide-react';
+import { FileText, File, MessageSquare, ArrowRight, Wrench, Network, FolderKanban } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
-import SpatialNode from '@/components/workspace/SpatialNode';
-import { cn } from '@/lib/utils';
 
-const tools = [
-  { name: 'Humanizer', icon: Wand2, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit' },
-  { name: 'Paraphraser', icon: Sparkles, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit' },
-  { name: 'Flashcards', icon: Copy, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit' },
-  { name: 'Focus Timer', icon: Timer, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit' },
-  { name: 'PDF Summarizer', icon: FileBox, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit' },
-  { name: 'Citation Generator', icon: Quote, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit' },
-  { name: 'JSON Formatter', icon: Braces, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit' },
-  { name: 'Code Formatter', icon: Code, color: 'text-white/60', bg: 'bg-white/5', href: '/brainkit' },
+const MODULES = [
+  {
+    id: 'notes',
+    title: 'Knowledge Base',
+    subtitle: 'Notes',
+    description: 'A lightning-fast, connected editor for capturing thoughts, organizing knowledge, and expanding your intellect.',
+    link: '/notes',
+    icon: <FileText size={20} />
+  },
+  {
+    id: 'documents',
+    title: 'Documents',
+    subtitle: 'Storage',
+    description: 'Securely store and connect external resources, links, and PDFs straight into your second brain context.',
+    link: '/storage',
+    icon: <File size={20} />
+  },
+  {
+    id: 'chat',
+    title: 'AI Architect',
+    subtitle: 'AI Chat',
+    description: 'Converse directly with your entire knowledge base. Extract profound insights with hyper-intelligent search.',
+    link: '/assistant',
+    icon: <MessageSquare size={20} />
+  },
+  {
+    id: 'brainkit',
+    title: 'Brain Kit',
+    subtitle: 'Workspaces',
+    description: 'Advanced productivity tools and modular workspace orchestrations perfectly tailored for your cognitive workflow.',
+    link: '/brainkit',
+    icon: <Wrench size={20} />
+  },
+  {
+    id: 'graph',
+    title: 'Knowledge Graph',
+    subtitle: 'Network',
+    description: 'Beautifully visualize the invisible connections between your thoughts in an interactive, organic nodular web.',
+    link: '/graph',
+    icon: <Network size={20} />
+  },
+  {
+    id: 'projects',
+    title: 'Projects',
+    subtitle: 'Pipelines',
+    description: 'Transform scattered ideas and connected knowledge into structured, actionable deliverables with laser-focus.',
+    link: '/projects',
+    icon: <FolderKanban size={20} />
+  }
 ];
 
-const nodes = [
-  { id: 'files', label: 'Files', sub: 'STORAGE', icon: Upload, accent: 'white', pos: { x: 0, y: -260 }, href: '/files' },
-  { id: 'note', label: 'New Note', sub: 'EDITOR', icon: Plus, accent: 'white', pos: { x: -380, y: -20 }, href: '/notes/new' },
-  { id: 'brainkit', label: 'Launch BrainKit', sub: 'UTILITIES', icon: Wrench, accent: 'white', pos: { x: 380, y: -20 }, href: null },
-  { id: 'projects', label: 'Projects', sub: 'WORKSPACES', icon: FolderOpen, accent: 'white', pos: { x: -350, y: 240 }, href: '/projects' },
-  { id: 'ai', label: 'Ask AI Assistant', sub: 'NEURAL', icon: Bot, accent: 'white', pos: { x: 0, y: 300 }, href: '/assistant' },
-  { id: 'graph', label: 'Knowledge Graph', sub: 'CONNECTIONS', icon: Network, accent: 'white', pos: { x: 350, y: 240 }, href: '/graph' },
-];
-
-function getGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return 'Good morning';
-  if (h < 18) return 'Good afternoon';
-  return 'Good evening';
-}
-
-export default function CommandCenterPage() {
+export default function MetalabDashboardPage() {
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
-  const [brainKitOpen, setBrainKitOpen] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const logout = useAuthStore((state) => state.logout);
+  const [activeModule, setActiveModule] = useState(MODULES[0].id);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({
-        x: (e.clientX - window.innerWidth / 2) / 40,
-        y: (e.clientY - window.innerHeight / 2) / 40,
-      });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    setMounted(true);
   }, []);
 
-  const handleNodeClick = (node: typeof nodes[0]) => {
-    if (node.id === 'brainkit') { setBrainKitOpen(true); return; }
-    if (node.href) router.push(node.href);
+  const handleLogout = () => {
+    logout?.();
+    router.push('/');
   };
 
-  const firstName = user?.name?.split(' ')[0] || 'friend';
+  if (!mounted) return <div className="min-h-screen bg-black" />;
+
+  const active = MODULES.find(m => m.id === activeModule) || MODULES[0];
+  const firstName = user?.name?.split(' ')[0] || 'Friend';
 
   return (
-    <div className="relative min-h-screen bg-transparent overflow-hidden flex flex-col items-center justify-center">
-      {/* BrainKit Overlay */}
-      <AnimatePresence>
-        {brainKitOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-2xl flex flex-col items-center justify-center p-6"
+    <div className="w-full h-screen overflow-hidden bg-transparent font-sans relative selection:bg-white/30 text-white">
+      {/* Background is now handled by layout.tsx */}
+
+      {/* Top Left Logo Area */}
+      <div className="fixed top-8 left-8 z-50 mix-blend-difference">
+        <Link href="/" className="text-2xl text-white font-medium tracking-tight" style={{ fontFamily: "'Instrument Serif', serif", fontStyle: "italic" }}>
+          Second Brain<span className="text-white/40">.</span>
+        </Link>
+      </div>
+
+      {/* Top Right User Info & Logout */}
+      <div className="fixed top-8 right-8 z-50 flex items-center gap-6 mix-blend-difference">
+        <span className="text-white/80 text-sm font-light uppercase tracking-widest hidden md:block">
+          {firstName}
+        </span>
+        <button 
+          onClick={handleLogout} 
+          className="text-sm bg-white text-black hover:bg-gray-200 px-5 py-2.5 rounded-full font-medium transition-colors"
+        >
+          Sign Out
+        </button>
+      </div>
+
+      {/* Mobile Top Horizontal Navigation */}
+      <div className="md:hidden fixed top-24 left-0 w-full overflow-x-auto scrollbar-hide px-6 flex gap-2 z-50">
+        {MODULES.map((mod) => (
+          <button
+            key={mod.id}
+            onClick={() => setActiveModule(mod.id)}
+            className={`
+              relative px-5 py-2.5 rounded-full flex-shrink-0 flex items-center gap-2 transition-all duration-300 text-[10px] uppercase font-bold tracking-widest
+              ${activeModule === mod.id ? 'text-white' : 'text-white/40 bg-white/5'}
+            `}
           >
-            <button
-              onClick={() => setBrainKitOpen(false)}
-              className="absolute top-10 right-10 p-3 rounded-full bg-white/5 text-white/40 hover:text-white transition-all border border-white/10"
-            >
-              <X className="w-6 h-6" />
-            </button>
+            {activeModule === mod.id && (
+              <motion.div 
+                layoutId="active-pill-mobile"
+                className="absolute inset-0 bg-white/10 backdrop-blur-xl rounded-full border border-white/10"
+              />
+            )}
+            <span className="relative z-10">{mod.subtitle}</span>
+          </button>
+        ))}
+      </div>
 
-            <motion.div
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.1 }}
-              className="text-center mb-16"
-            >
-              <h2 className="text-5xl font-bold text-white tracking-tighter mb-4 uppercase">BrainKit Tools</h2>
-              <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Power up your productivity with AI-driven utilities.</p>
-            </motion.div>
+      {/* Desktop Left Vertical Pill Navigation */}
+      <div className="hidden md:flex fixed left-8 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-50">
+        {MODULES.map((mod) => (
+          <button
+            key={mod.id}
+            onClick={() => setActiveModule(mod.id)}
+            className={`
+              relative px-6 py-3.5 rounded-full flex items-center gap-3 transition-all duration-300 text-sm tracking-wide
+              ${activeModule === mod.id ? 'text-white' : 'text-white/40 hover:text-white/80 bg-white/5'}
+            `}
+            style={{ fontWeight: 350 }}
+          >
+            {activeModule === mod.id && (
+              <motion.div 
+                layoutId="active-pill"
+                className="absolute inset-0 bg-[rgba(186,186,186,0.15)] backdrop-blur-xl rounded-full border border-white/10"
+                initial={false}
+                transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+              />
+            )}
+            <span className="relative z-10">{mod.subtitle}</span>
+          </button>
+        ))}
+      </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl">
-              {tools.map((tool, i) => (
-                <motion.button
-                  key={tool.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.05 }}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => { setBrainKitOpen(false); router.push(tool.href); }}
-                  className="p-8 bg-white/[0.03] rounded-3xl border border-white/10 hover:border-white/40 flex flex-col items-center gap-4 transition-all group shadow-2xl backdrop-blur-xl"
-                >
-                  <div className={cn("p-4 rounded-2xl transition-transform group-hover:scale-110", tool.bg)}>
-                    <tool.icon className={cn("w-7 h-7", tool.color)} />
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-white/40 group-hover:text-white transition-colors">{tool.name}</span>
-                </motion.button>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Narrative Prompt */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="z-20 text-center pointer-events-none select-none"
-      >
-        <p className="text-white/40 font-bold tracking-[0.4em] uppercase mb-4 text-[10px]">
-          Second Brain
-        </p>
-        <h1 className="text-6xl md:text-7xl font-bold text-white tracking-tighter mb-10 leading-[1.05]">
-          What do you want<br />to work on today?
-        </h1>
-        
-        <div className="flex items-center justify-center gap-4 mt-8">
-            <div className="px-4 py-2 bg-white/[0.04] border border-white/10 rounded-full flex items-center gap-2.5 backdrop-blur-md">
-                <div className="flex items-center gap-1">
-                    <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] text-white font-sans">Ctrl</kbd>
-                    <span className="text-white/30 text-[10px]">+</span>
-                    <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] text-white font-sans">K</kbd>
-                </div>
-                <span className="text-[10px] font-bold text-white/50 uppercase tracking-widest leading-none">to search</span>
+      {/* Main Dynamic Showcase Area */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active.id}
+            initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, y: -40, filter: 'blur(10px)' }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col items-center justify-center text-center max-w-5xl w-full px-6 md:px-8 relative z-10"
+          >
+            <div className="mb-4 md:mb-8 flex items-center gap-3 bg-white/5 px-4 md:px-5 py-2 md:py-2.5 rounded-full backdrop-blur-xl border border-white/10 text-white/70">
+              {active.icon}
+              <span className="uppercase tracking-[0.2em] text-[8px] md:text-[10px] font-semibold">{active.id} module</span>
             </div>
             
-            <div className="px-4 py-2 bg-white/[0.04] border border-white/10 rounded-full flex items-center gap-2.5 backdrop-blur-md">
-                <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-[10px] text-white font-sans">/</kbd>
-                <span className="text-[10px] font-bold text-white/50 uppercase tracking-widest leading-none">to talk to AI</span>
-            </div>
-        </div>
-      </motion.div>
-
-      {/* Spatial Canvas */}
-      <motion.div 
-        animate={{ 
-          x: -mousePos.x, 
-          y: -mousePos.y,
-        }}
-        className="absolute inset-0 z-10"
-      >
-        {nodes.map((node, i) => (
-          <SpatialNode
-            key={node.id}
-            id={node.id}
-            label={node.label}
-            sub={node.sub}
-            icon={node.icon}
-            accentColor={node.accent}
-            position={node.pos}
-            onClick={() => handleNodeClick(node)}
-            delay={0.2 + i * 0.1}
-          />
-        ))}
-      </motion.div>
-
-      {/* Ambient background interaction - White Premium */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[700px] bg-white/[0.03] rounded-full blur-[180px] opacity-40" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-white/[0.02] rounded-full blur-[150px] opacity-30" />
-      </div>
-
-      {/* Minimal Bottom Info */}
-      <div className="absolute bottom-12 left-12 z-50">
-        <div className="flex flex-col gap-1">
-            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">Workspace Active</p>
-            <p className="text-xs text-white/50 font-medium tracking-wide">Monochrome Network Synced</p>
-        </div>
-      </div>
-      
-      <div className="absolute bottom-12 right-12 z-50 flex items-center gap-6">
-        <button onClick={() => router.push('/settings')} className="text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase font-semibold">Settings</button>
-        <button onClick={() => {/* logout logic */}} className="text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase font-semibold">Logout</button>
+            <h1 
+              className="text-[3.5rem] sm:text-[7rem] md:text-[9rem] lg:text-[11rem] leading-[0.95] md:leading-[0.9] text-white font-normal mb-6 md:mb-8 max-w-[95vw] sm:max-w-[90vw] whitespace-normal sm:whitespace-nowrap"
+              style={{ fontFamily: "'Instrument Serif', serif", letterSpacing: '-0.04em' }}
+            >
+              {active.title}
+            </h1>
+            
+            <p className="text-base md:text-2xl text-white/50 font-light max-w-2xl mb-10 md:mb-14 leading-relaxed mix-blend-lighten pointer-events-auto px-4 md:px-0">
+              {active.description}
+            </p>
+            
+            <Link 
+              href={active.link}
+              className="group pointer-events-auto relative flex items-center justify-center gap-4 bg-white text-black px-8 md:px-10 py-4 md:py-5 rounded-full text-base md:text-lg font-medium overflow-hidden hover:scale-105 transition-transform duration-300"
+            >
+              <span className="relative z-10 transition-transform duration-300 group-hover:-translate-x-1">Launch {active.subtitle}</span>
+              <ArrowRight className="relative z-10 transition-transform duration-300 group-hover:translate-x-2" size={20} />
+              <div className="absolute inset-0 bg-gray-200 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
+            </Link>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

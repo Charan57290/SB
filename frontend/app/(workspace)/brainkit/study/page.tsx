@@ -1,8 +1,12 @@
 'use client';
 
 import { GraduationCap, BookOpen, Brain, Zap, Plus, Clock } from 'lucide-react';
+import PomodoroTimer from '@/components/workspace/PomodoroTimer';
+import FlashcardGenerator from '@/components/workspace/FlashcardGenerator';
+import { useState } from 'react';
 
 export default function StudyToolsPage() {
+  const [showFlashcards, setShowFlashcards] = useState(false);
   return (
     <div className="space-y-8 max-w-6xl mx-auto relative z-20">
       <div className="flex items-center justify-between">
@@ -27,38 +31,17 @@ export default function StudyToolsPage() {
           <p className="text-white/30 text-xs font-medium mb-8 leading-relaxed uppercase tracking-wide">
             Extract key concepts from your notes and generate deck of flashcards for active recall.
           </p>
-          <button className="w-full bg-white text-black font-bold py-3 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-gray-200 transition-all flex items-center justify-center gap-2">
+          <button 
+            onClick={() => setShowFlashcards(true)}
+            className="w-full bg-white text-black font-bold py-3 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+          >
             Generate from Workspace
           </button>
         </div>
 
-        {/* Quiz Generator */}
-        <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-8 hover:border-white/30 transition-all group overflow-hidden relative backdrop-blur-xl">
-          <div className="p-3 rounded-2xl bg-white/[0.05] border border-white/10 text-white/40 w-fit mb-6 shadow-2xl">
-            <Brain className="w-6 h-6" />
-          </div>
-          <h3 className="text-xl font-bold text-white mb-3 uppercase tracking-tight">Neural Quizzer</h3>
-          <p className="text-white/30 text-xs font-medium mb-8 leading-relaxed uppercase tracking-wide">
-            Custom quizzes generated from your intelligence nodes. Supports MCQ and open response.
-          </p>
-          <button className="w-full border border-white/20 hover:border-white/40 text-white font-bold py-3 rounded-2xl text-[10px] uppercase tracking-widest transition-all">
-            Build Quiz Session
-          </button>
-        </div>
 
         {/* Study Timer Widget */}
-        <div className="bg-white text-black rounded-[2rem] p-8 flex flex-col items-center justify-center text-center shadow-2xl shadow-white/5 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,0,0,0.1),transparent_70%)]"></div>
-          <div className="p-3 rounded-2xl bg-black/10 text-black w-fit mb-6 relative z-10">
-            <Clock className="w-6 h-6" />
-          </div>
-          <h3 className="text-xl font-bold text-black mb-1 relative z-10 uppercase tracking-tighter">Deep Work Timer</h3>
-          <p className="text-black/40 text-[10px] font-bold uppercase tracking-widest mb-6 relative z-10">Optimized Pomodoro session</p>
-          <div className="text-5xl font-black text-black tracking-tighter mb-8 relative z-10">25:00</div>
-          <button className="w-full bg-black text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest hover:scale-105 transition-all relative z-10">
-            IGNITE SESSION
-          </button>
-        </div>
+        <PomodoroTimer />
       </div>
 
       <div className="bg-white/[0.02] border border-white/5 rounded-[2rem] p-8 flex flex-col md:flex-row items-center gap-10 backdrop-blur-md">
@@ -93,6 +76,10 @@ export default function StudyToolsPage() {
           </div>
         </div>
       </div>
+
+      {showFlashcards && (
+        <FlashcardGenerator onClose={() => setShowFlashcards(false)} />
+      )}
     </div>
   );
 }

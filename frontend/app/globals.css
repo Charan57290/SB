@@ -2,24 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
 html {
   scroll-behavior: smooth;
 }
 
 :root {
   --color-background-primary: #000000;
-  --color-background-secondary: #0a0a0a;
+  --color-background-secondary: #050505;
   --color-accent-emerald: #ffffff;
   --color-accent-teal: #d1d5db;
   --color-accent-green: #9ca3af;
   --color-accent: #ffffff;
-  --color-neon: #e5e7eb;
-  --color-purpleGlow: #d1d5db;
-  --color-card-bg: rgba(255, 255, 255, 0.03);
-  --color-card-border: rgba(255, 255, 255, 0.1);
-  --color-card-hover: rgba(255, 255, 255, 0.06);
+  --color-neon: #ffffff;
+  --color-purpleGlow: #333333;
+  --color-card-bg: rgba(255, 255, 255, 0.02);
+  --color-card-border: rgba(255, 255, 255, 0.08);
+  --color-card-hover: rgba(255, 255, 255, 0.05);
   --color-text-primary: #ffffff;
-  --color-text-secondary: #a3a3a3;
+  --color-text-secondary: #737373;
   --font-sans: 'Inter', 'Space Grotesk', system-ui, sans-serif;
 }
 

@@ -13,7 +13,8 @@ import {
   Code, 
   Braces,
   Settings,
-  Zap
+  Zap,
+  Terminal
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -21,11 +22,9 @@ const tools = [
   { name: 'Humanizer', icon: Wand2 },
   { name: 'Paraphraser', icon: Sparkles },
   { name: 'Flashcards', icon: Copy },
-  { name: 'Focus Timer', icon: Timer },
+  { name: 'Pomodoro', icon: Timer },
   { name: 'PDF Summarizer', icon: FileBox },
   { name: 'Citation Generator', icon: Quote },
-  { name: 'JSON Formatter', icon: Braces },
-  { name: 'Code Formatter', icon: Code },
 ];
 
 export default function BrainKitLauncherOverlay({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
@@ -81,7 +80,7 @@ export default function BrainKitLauncherOverlay({ isOpen, onClose }: { isOpen: b
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 w-full max-w-5xl"
+            className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5 w-full max-w-5xl"
           >
             {tools.map((tool, index) => (
               <motion.button

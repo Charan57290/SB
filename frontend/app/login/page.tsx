@@ -23,7 +23,12 @@ export default function LoginPage() {
     setError('');
     try {
       const response = await api.post('/auth/login', { email, password });
-      setAuth(response.data.token, { email: response.data.email, id: response.data.userId });
+      setAuth(response.data.token, { 
+        email: response.data.user.email, 
+        id: response.data.user.userId, 
+        name: response.data.user.name,
+        avatar: response.data.user.avatar
+      });
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');

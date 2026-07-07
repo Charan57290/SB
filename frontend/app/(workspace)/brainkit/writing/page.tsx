@@ -9,15 +9,14 @@ import ReactMarkdown from 'react-markdown';
 
 
 const TOOLS = [
-  { id: 'humanize', label: 'Humanizer', prompt: `You are an expert ghostwriter. Your goal is to rewrite the provided text so that it completely bypasses AI detectors like GPTZero, Originality.ai, and Turnitin, scoring 0% AI. You MUST obey these rules perfectly:
+  { id: 'humanize', label: 'Humanizer', prompt: `You are an expert academic ghostwriter. Your goal is to rewrite the provided text so that it sounds like a highly sophisticated human academic while completely bypassing AI detectors (0% AI score). You MUST obey these rules:
 
-1. HIGH BURSTINESS & PERPLEXITY: Mix extremely short sentences (3-5 words) with longer, complex ones. Break up uniform sentence lengths. Use active voice.
-2. HUMAN QUIRKS: Use contractions (can't, didn't, it's). Occasionally use em-dashes (—) or parentheses for natural pauses and side-thoughts.
-3. FORBIDDEN WORDS: NEVER use words like: delve, utilize, moreover, furthermore, testament, landscape, tapestry, bustling, pivotal, overarching, robust, intricate, seamless, or in conclusion.
-4. TONE: Write casually but professionally, like a human expert explaining something to a colleague. Use simple transition words like "But," "So," "And," or "Look," instead of formal ones.
-5. CONTEXT & FORMAT: Do NOT change the factual meaning. Keep the EXACT same markdown structure (headings, bullet points, numbering). Do not merge sections.
-6. EXACT LENGTH: The output MUST be within +/- 30 words of the input length.
-7. NO PREAMBLE: Return strictly ONE version of the text and nothing else. Do not introduce the text.
+1. FORMAL ACADEMIC TONE: Maintain a professional, objective, and scholarly voice. Use precise terminology and sophisticated phrasing. Avoid slang, casual idioms, or "human quirks" that reduce professionalism.
+2. HIGH BURSTINESS & COMPLEXITY: Vary sentence structure significantly. Use a mix of complex subordinating clauses and concise, impactful statements. This variety is key to avoiding "robotic" rhythmic patterns.
+3. HUMANIZED TRANSITIONS: Use logical, smooth transitions. Instead of formal "Moreover" or "Furthermore," use more natural professional transitions like "Beyond this," "In this context," or "Crucially."
+4. NO AI OVERUSE: Avoid common AI "crutch" words like: delve, tapestry, testament, bustling, pivotal, overarching, robust, or "in conclusion."
+5. EXACT CONTEXT: Do NOT change the factual meaning or academic integrity of the text. Keep the EXACT same markdown structure.
+6. NO PREAMBLE: Return strictly ONE version of the rewritten text and nothing else.
 
 Text to rewrite:
 
@@ -88,7 +87,7 @@ export default function WritingToolsPage() {
           </button>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-white uppercase">Writing Intelligence</h1>
-            <p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest mt-1">Powered by Gemini 2.5 Flash</p>
+            <p className="text-[10px] text-gray-600 font-bold uppercase tracking-widest mt-1">Powered by OpenRouter Intelligence</p>
           </div>
         </div>
 
@@ -203,7 +202,7 @@ export default function WritingToolsPage() {
           <div className="mt-6 pt-6 border-t border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-2 text-[10px] text-gray-600 font-bold uppercase tracking-widest">
               <CheckCircle2 className="w-3 h-3" />
-              Gemini 2.0 Flash
+              OpenRouter Model
             </div>
             {output && (
               <button

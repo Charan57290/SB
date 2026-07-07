@@ -40,8 +40,6 @@ export default function NeuralAssistant() {
 
   return (
     <div className="min-h-screen bg-transparent flex flex-col relative z-20">
-      <MinimalTopNav title="AI Assistant" />
-
       <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full px-4 md:px-6 py-6 md:py-10">
         <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="mb-8 text-center">
           <div className="w-14 h-14 bg-white/[0.05] border border-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-white/5 backdrop-blur-xl">
