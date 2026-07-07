@@ -26,7 +26,7 @@ Text to rewrite:
 ];
 
 async function callGemini(prompt: string, text: string): Promise<string> {
-  const response = await fetch('http://localhost:5000/api/brainkit/writing/generate', {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/brainkit/writing/generate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ prompt, text })
