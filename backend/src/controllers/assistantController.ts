@@ -29,7 +29,7 @@ export const askAssistant = async (req: Request, res: Response) => {
     
     if (notes.length > 0) {
         contextBuilder += "### NOTES:\n";
-        notes.forEach(n => {
+        notes.forEach((n: any) => {
             // Very roughly strip html out of tiptap content for better context
             const strippedContent = n.content.replace(/<[^>]*>?/gm, '');
             contextBuilder += `- Title: ${n.title}\n  Content: ${strippedContent}\n\n`;
@@ -44,7 +44,7 @@ export const askAssistant = async (req: Request, res: Response) => {
 
     if (docs.length > 0) {
         contextBuilder += "### UPLOADED STORAGE DOCUMENTS:\n";
-        docs.forEach(d => {
+        docs.forEach((d: any) => {
             contextBuilder += `- Document Name: ${d.title}\n  Text Context: ${d.extractedText ? d.extractedText.substring(0, 5000) : 'No readable text'}\n\n`; // Trim huge documents slightly to avert token caps
         });
     }

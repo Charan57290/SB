@@ -170,7 +170,7 @@ export const getNoteTopics = async (req: Request, res: Response) => {
       return res.json(['No Data']);
     }
 
-    const notesContext = notes.map(n => `Title: ${n.title}\nContent snippet: ${n.content.replace(/<[^>]*>?/gm, '').substring(0, 100)}`).join('\n\n');
+    const notesContext = notes.map((n: any) => `Title: ${n.title}\nContent snippet: ${n.content.replace(/<[^>]*>?/gm, '').substring(0, 100)}`).join('\n\n');
     
     const prompt = `Analyze the following list of note titles and snippets from a user's knowledge base. Categorize the user's overall knowledge into 3 to 5 high-level, professional topics (e.g. "Machine Learning", "Software Engineering", "Philosophy"). 
 If the notes are random, completely unrelated, or lack any clear overarching theme, you MUST include "Arbitrary" as one of the categories. 
